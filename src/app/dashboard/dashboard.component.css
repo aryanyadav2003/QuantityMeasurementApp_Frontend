@@ -1,0 +1,6 @@
+/* dashboard.component.css */
+
+/* Operation card hover effect */
+a[routerLink]:hover {
+  text-decoration: none;
+}

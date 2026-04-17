@@ -1,0 +1,11 @@
+/* login.component.css */
+
+input:focus {
+  border-color: #1976d2 !important;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.15);
+}
+
+button[type="button"]:hover:not(:disabled) {
+  background: #1565c0 !important;
+}

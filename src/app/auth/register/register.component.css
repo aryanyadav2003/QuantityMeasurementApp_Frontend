@@ -1,0 +1,7 @@
+/* register.component.css */
+
+input:focus, select:focus {
+  border-color: #1976d2 !important;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.15);
+}
