@@ -2,17 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, tap } from 'rxjs';
 import { AuthResponseDTO, LoginDTO, RegisterDTO } from '../shared/models/quantity.model';
+import { environment } from '../../environments/environment';
 
 // FIX: This service already had login() and register() methods.
-// The TypeScript error "Property 'login' does not exist on type 'AuthService'" 
-// was caused by incorrect imports in components. This file is correct.
-
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   getToken() {
     throw new Error('Method not implemented.');
   }
-  private readonly API = 'http://localhost:5000/api/v1/auth';
+  private readonly API = `${environment.apiUrl}api/v1/auth`;
 
   // Stores the currently logged-in user. Initially reads from localStorage.
   private currentUserSubject = new BehaviorSubject<AuthResponseDTO | null>(
