@@ -1,0 +1,9 @@
+/* navbar.component.css */
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+nav button:hover {
+  background: rgba(255,255,255,0.15) !important;
+}

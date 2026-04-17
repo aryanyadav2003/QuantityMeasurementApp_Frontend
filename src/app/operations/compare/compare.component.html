@@ -1,0 +1,88 @@
+<app-navbar></app-navbar>
+
+<div style="max-width:700px; margin:32px auto; padding:0 16px;">
+
+  <!-- Back link -->
+  <a routerLink="/dashboard" style="color:#1976d2; text-decoration:none; font-size:14px;">← Back to Dashboard</a>
+
+  <h2 style="margin:16px 0 4px;">⚖️ Compare Quantities</h2>
+  <p style="color:#666; margin:0 0 24px; font-size:14px;">Check if two quantities are equal. Works without login.</p>
+
+  <!-- Error -->
+  <div *ngIf="error" style="background:#ffebee; color:#c62828; padding:12px; border-radius:4px; margin-bottom:16px;">
+    {{ error }}
+  </div>
+
+  <div style="background:white; padding:28px; border-radius:8px; border:1px solid #e0e0e0; box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+
+    <!-- Measurement type selector -->
+    <div style="margin-bottom:20px;">
+      <label style="display:block; font-weight:600; margin-bottom:10px;">Measurement Type</label>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button
+          *ngFor="let t of types"
+          (click)="onTypeChange(t)"
+          [style.background]="measurementType === t ? '#1976d2' : '#f5f5f5'"
+          [style.color]="measurementType === t ? 'white' : '#333'"
+          style="padding:8px 16px; border:1px solid #ccc; border-radius:4px; cursor:pointer; font-size:14px;">
+          {{ t }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Quantity 1 -->
+    <fieldset style="border:1px solid #e0e0e0; border-radius:6px; padding:16px; margin-bottom:16px;">
+      <legend style="font-weight:600; padding:0 8px; color:#1976d2;">Quantity 1</legend>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:120px;">
+          <label style="display:block; font-size:13px; margin-bottom:4px;">Value</label>
+          <input type="number" [(ngModel)]="q1.value"
+            style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;" />
+        </div>
+        <div style="flex:1; min-width:120px;">
+          <label style="display:block; font-size:13px; margin-bottom:4px;">Unit</label>
+          <select [(ngModel)]="q1.unit"
+            style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
+            <option *ngFor="let u of units" [value]="u">{{ u }}</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Quantity 2 -->
+    <fieldset style="border:1px solid #e0e0e0; border-radius:6px; padding:16px; margin-bottom:24px;">
+      <legend style="font-weight:600; padding:0 8px; color:#1976d2;">Quantity 2</legend>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:120px;">
+          <label style="display:block; font-size:13px; margin-bottom:4px;">Value</label>
+          <input type="number" [(ngModel)]="q2.value"
+            style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;" />
+        </div>
+        <div style="flex:1; min-width:120px;">
+          <label style="display:block; font-size:13px; margin-bottom:4px;">Unit</label>
+          <select [(ngModel)]="q2.unit"
+            style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
+            <option *ngFor="let u of units" [value]="u">{{ u }}</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Compare button -->
+    <button (click)="compare()" [disabled]="loading"
+      style="padding:12px 32px; background:#1976d2; color:white; border:none; border-radius:4px; font-size:15px; cursor:pointer;">
+      {{ loading ? 'Comparing...' : 'Compare' }}
+    </button>
+
+    <!-- Result -->
+    <div *ngIf="result" style="margin-top:20px; padding:16px; border-radius:6px;"
+         [style.background]="result.resultString === 'True' ? '#e8f5e9' : '#fff3e0'"
+         [style.border]="result.resultString === 'True' ? '1px solid #a5d6a7' : '1px solid #ffcc02'">
+      <strong style="font-size:16px;">
+        {{ result.resultString === 'True' ? '✅ Equal' : '❌ Not Equal' }}
+      </strong>
+      <p *ngIf="result.message" style="margin:6px 0 0; font-size:14px; color:#555;">{{ result.message }}</p>
+    </div>
+
+  </div>
+</div>

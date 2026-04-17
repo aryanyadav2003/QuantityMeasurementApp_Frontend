@@ -1,0 +1,138 @@
+<app-navbar></app-navbar>
+
+<div style="max-width:960px; margin:32px auto; padding:0 16px;">
+
+  <a routerLink="/dashboard" style="color:#1976d2; text-decoration:none; font-size:14px;">← Back to Dashboard</a>
+
+  <h2 style="margin:16px 0 4px;">📋 Operation History</h2>
+  <p style="color:#666; margin:0 0 24px; font-size:14px;">All operations saved to the database. Only visible when logged in.</p>
+
+  <!-- Error -->
+  <div *ngIf="error" style="background:#ffebee; color:#c62828; padding:12px; border-radius:4px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+    <span>{{ error }}</span>
+    <a routerLink="/auth/login" *ngIf="error.includes('session')"
+       style="color:#c62828; font-weight:600; text-decoration:underline;">Login again</a>
+  </div>
+
+  <!-- Filters row -->
+  <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px; align-items:flex-end;">
+
+    <!-- Filter by Operation -->
+    <div>
+      <label style="display:block; font-size:12px; color:#666; margin-bottom:4px;">Filter by Operation</label>
+      <select [(ngModel)]="filterOp" (change)="filterByOperation()"
+        style="padding:8px 12px; border:1px solid #ccc; border-radius:4px; font-size:14px;">
+        <option value="">All Operations</option>
+        <option value="COMPARE">COMPARE</option>
+        <option value="CONVERT">CONVERT</option>
+        <option value="ADD">ADD</option>
+        <option value="SUBTRACT">SUBTRACT</option>
+        <option value="DIVIDE">DIVIDE</option>
+      </select>
+    </div>
+
+    <!-- Filter by Type -->
+    <div>
+      <label style="display:block; font-size:12px; color:#666; margin-bottom:4px;">Filter by Measurement Type</label>
+      <select [(ngModel)]="filterType" (change)="filterByType()"
+        style="padding:8px 12px; border:1px solid #ccc; border-radius:4px; font-size:14px;">
+        <option value="">All Types</option>
+        <option value="LENGTH">LENGTH</option>
+        <option value="WEIGHT">WEIGHT</option>
+        <option value="VOLUME">VOLUME</option>
+        <option value="TEMPERATURE">TEMPERATURE</option>
+      </select>
+    </div>
+
+    <!-- Refresh button -->
+    <button (click)="loadHistory()"
+      style="padding:8px 16px; background:#f5f5f5; border:1px solid #ccc; border-radius:4px; cursor:pointer; font-size:14px;">
+      🔄 Refresh
+    </button>
+
+  </div>
+
+  <!-- Loading spinner -->
+  <div *ngIf="loading" style="text-align:center; padding:40px; color:#666;">
+    Loading history...
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!loading && !error && history.length === 0"
+       style="text-align:center; padding:60px 20px; background:white; border-radius:8px; border:1px solid #e0e0e0;">
+    <p style="font-size:48px; margin:0 0 12px;">📭</p>
+    <p style="color:#666; font-size:16px; margin:0;">No history found. Go perform some operations!</p>
+    <a routerLink="/operations/compare" style="color:#1976d2; display:inline-block; margin-top:12px;">Try Compare →</a>
+  </div>
+
+  <!-- History table -->
+  <div *ngIf="!loading && history.length > 0" style="overflow-x:auto;">
+    <table style="width:100%; border-collapse:collapse; background:white; border-radius:8px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+      <thead>
+        <tr style="background:#1976d2; color:white;">
+          <th style="padding:12px 16px; text-align:left; font-size:13px; font-weight:600;">#</th>
+          <th style="padding:12px 16px; text-align:left; font-size:13px; font-weight:600;">Operation</th>
+          <th style="padding:12px 16px; text-align:left; font-size:13px; font-weight:600;">Type</th>
+          <th style="padding:12px 16px; text-align:left; font-size:13px; font-weight:600;">Input 1</th>
+          <th style="padding:12px 16px; text-align:left; font-size:13px; font-weight:600;">Input 2</th>
+          <th style="padding:12px 16px; text-align:left; font-size:13px; font-weight:600;">Result</th>
+          <th style="padding:12px 16px; text-align:left; font-size:13px; font-weight:600;">Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of history; let i = index"
+            [style.background]="i % 2 === 0 ? 'white' : '#fafafa'">
+
+          <td style="padding:12px 16px; font-size:13px; color:#888;">{{ i + 1 }}</td>
+
+          <td style="padding:12px 16px;">
+            <span style="background:#e3f2fd; color:#1565c0; padding:2px 8px; border-radius:12px; font-size:12px; font-weight:600;">
+              {{ item.operation }}
+            </span>
+          </td>
+
+          <td style="padding:12px 16px; font-size:13px; color:#555;">
+            {{ item.operand1MeasurementType }}
+          </td>
+
+          <td style="padding:12px 16px; font-size:13px;">
+            {{ item.operand1Value }} {{ item.operand1Unit }}
+          </td>
+
+          <td style="padding:12px 16px; font-size:13px; color:#555;">
+            <ng-container *ngIf="item.operand2Value !== null && item.operand2Value !== undefined">
+              {{ item.operand2Value }} {{ item.operand2Unit }}
+            </ng-container>
+            <span *ngIf="item.operand2Value === null || item.operand2Value === undefined" style="color:#bbb;">—</span>
+          </td>
+
+          <td style="padding:12px 16px; font-size:13px;">
+            <!-- Compare result -->
+            <ng-container *ngIf="item.operation === 'COMPARE'">
+              <span [style.color]="item.comparisonResult ? '#2e7d32' : '#c62828'">
+                {{ item.comparisonResult ? '✅ Equal' : '❌ Not Equal' }}
+              </span>
+            </ng-container>
+            <!-- Divide result -->
+            <ng-container *ngIf="item.operation === 'DIVIDE'">
+              {{ item.scalarResult }}
+            </ng-container>
+            <!-- Convert / Add / Subtract result -->
+            <ng-container *ngIf="item.operation !== 'COMPARE' && item.operation !== 'DIVIDE'">
+              {{ item.resultValue }} {{ item.resultUnit }}
+            </ng-container>
+          </td>
+
+          <td style="padding:12px 16px; font-size:12px; color:#888; white-space:nowrap;">
+            {{ formatDate(item.timestamp) }}
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+    <p style="text-align:right; font-size:13px; color:#888; margin-top:8px;">
+      Total: {{ history.length }} records
+    </p>
+  </div>
+
+</div>
