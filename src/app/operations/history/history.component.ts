@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { NavbarComponent } from '../../dashboard/navbar.component';
@@ -32,7 +32,8 @@ export class HistoryComponent implements OnInit {
 
   constructor(
     private svc: QuantityService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -50,6 +51,7 @@ export class HistoryComponent implements OnInit {
       next: (res) => {
         this.history = res;
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: (e) => {
         console.error('Load History Error:', e);
@@ -59,6 +61,7 @@ export class HistoryComponent implements OnInit {
           this.error = e.error?.errorMessage || e.message || 'Failed to load history.';
         }
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -72,11 +75,13 @@ export class HistoryComponent implements OnInit {
       next: (res) => {
         this.history = res;
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: (e) => {
         console.error('Filter Operation Error:', e);
         this.error = e.error?.errorMessage || e.message || 'Filter failed.';
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -90,11 +95,13 @@ export class HistoryComponent implements OnInit {
       next: (res) => {
         this.history = res;
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: (e) => {
         console.error('Filter Type Error:', e);
         this.error = e.error?.errorMessage || e.message || 'Filter failed.';
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
