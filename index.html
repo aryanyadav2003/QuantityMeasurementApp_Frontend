@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QMeasure — Login</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+
+  <div class="auth-page">
+    <div class="auth-card card">
+
+      <!-- Logo -->
+      <div class="auth-logo">
+        <h1>⚖️ QMeasure</h1>
+        <p>Quantity Measurement Application</p>
+      </div>
+
+      <!-- Login / Register Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-form="loginForm">Login</button>
+        <button class="auth-tab"        data-form="registerForm">Register</button>
+      </div>
+
+      <!-- ── LOGIN FORM ── -->
+      <form id="loginForm" class="auth-form active" novalidate>
+        <div id="loginAlert" class="alert"></div>
+
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" type="email" placeholder="admin@test.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" type="password" placeholder="••••••••" required>
+        </div>
+
+        <button id="loginBtn" class="btn btn-primary btn-full" type="submit" data-text="Login">
+          <span class="spinner" id="loginSpinner"></span>
+          <span class="btn-text">Login</span>
+        </button>
+      </form>
+
+      <!-- ── REGISTER FORM ── -->
+      <form id="registerForm" class="auth-form" novalidate>
+        <div id="registerAlert" class="alert"></div>
+
+        <div class="form-group">
+          <label for="regName">Full Name</label>
+          <input id="regName" type="text" placeholder="John Doe" required>
+        </div>
+
+        <div class="form-group">
+          <label for="regEmail">Email</label>
+          <input id="regEmail" type="email" placeholder="john@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="regPassword">Password</label>
+          <input id="regPassword" type="password" placeholder="Min 6 characters" required>
+        </div>
+
+        <div class="form-group">
+          <label>Select Role</label>
+          <div class="role-select">
+            <button type="button" class="role-btn active" data-role="USER">👤 User</button>
+            <button type="button" class="role-btn"        data-role="ADMIN">🛡️ Admin</button>
+          </div>
+        </div>
+
+        <button id="registerBtn" class="btn btn-primary btn-full" type="submit" data-text="Create Account">
+          <span class="spinner" id="registerSpinner"></span>
+          <span class="btn-text">Create Account</span>
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

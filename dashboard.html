@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QMeasure — Quantity Measurement App</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════
+       AUTH MODAL — Login / Register popup
+  ══════════════════════════════════════════ -->
+  <div class="modal-overlay" id="authModal">
+    <div class="modal-card">
+      <button class="modal-close" id="modalClose">✕</button>
+
+      <div class="modal-logo">
+        <h2>⚖️ QMeasure</h2>
+        <p>Sign in to access all features</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-form="login">Login</button>
+        <button class="auth-tab"        data-form="register">Register</button>
+      </div>
+
+      <!-- LOGIN Form -->
+      <form id="loginForm" class="auth-form active" novalidate>
+        <div id="loginAlert" class="alert"></div>
+
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" type="email" placeholder="admin@test.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" type="password" placeholder="••••••••" required>
+        </div>
+
+        <button id="loginSubmitBtn" class="btn btn-primary btn-full" type="submit" data-text="Login">
+          <span class="spinner" id="loginSpinner"></span>
+          <span class="btn-text">Login</span>
+        </button>
+      </form>
+
+      <!-- REGISTER Form -->
+      <form id="registerForm" class="auth-form" novalidate>
+        <div id="registerAlert" class="alert"></div>
+
+        <div class="form-group">
+          <label for="regName">Full Name</label>
+          <input id="regName" type="text" placeholder="John Doe" required>
+        </div>
+
+        <div class="form-group">
+          <label for="regEmail">Email</label>
+          <input id="regEmail" type="email" placeholder="john@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="regPassword">Password</label>
+          <input id="regPassword" type="password" placeholder="Min 6 characters" required>
+        </div>
+
+        <div class="form-group">
+          <label>Select Role</label>
+          <div class="role-select">
+            <button type="button" class="role-btn active" data-role="USER">👤 User</button>
+            <button type="button" class="role-btn"        data-role="ADMIN">🛡️ Admin</button>
+          </div>
+        </div>
+
+        <button id="registerSubmitBtn" class="btn btn-primary btn-full" type="submit" data-text="Create Account">
+          <span class="spinner" id="registerSpinner"></span>
+          <span class="btn-text">Create Account</span>
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       NAVBAR
+  ══════════════════════════════════════════ -->
+  <nav class="navbar">
+    <div class="container flex-between">
+      <a class="navbar-brand" href="dashboard.html">⚖️ QMeasure</a>
+      <div class="navbar-links">
+        <a class="nav-link active" href="dashboard.html">Dashboard</a>
+        <a class="nav-link"        href="operations.html">Operations</a>
+        <!-- Guest buttons -->
+        <button id="navLoginBtn"    class="btn btn-outline"  style="padding:6px 14px; font-size:0.82rem">Login</button>
+        <button id="navRegisterBtn" class="btn btn-primary"  style="padding:6px 14px; font-size:0.82rem">Register</button>
+        <!-- Logged-in info -->
+        <span id="navUser" class="navbar-user"></span>
+        <span id="navRole" class="badge"></span>
+        <button id="logoutBtn" class="btn btn-outline" style="padding:6px 14px; font-size:0.82rem; display:none">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════
+       HERO — visible to everyone
+  ══════════════════════════════════════════ -->
+  <section class="hero">
+    <h1>⚖️ Quantity Measurement App</h1>
+    <p>Compare, convert, add, subtract and divide quantities across Length, Weight, Volume and Temperature</p>
+    <!-- Guest CTA -->
+    <div class="hero-btns guest-only">
+      <button class="btn btn-primary" onclick="AuthModal.open('register')">🚀 Get Started — Register</button>
+      <button class="btn btn-outline" onclick="AuthModal.open('login')">Login</button>
+    </div>
+    <!-- Logged-in CTA -->
+    <div class="hero-btns auth-only" style="display:none">
+      <a class="btn btn-primary" href="operations.html">⚡ Start Operations</a>
+    </div>
+  </section>
+
+  <main class="container" style="padding-bottom:48px">
+
+    <!-- ══ OPERATION CARDS — visible to everyone ══ -->
+    <h2 style="margin-bottom:16px">⚡ Available Operations</h2>
+    <div class="op-grid">
+      <div class="op-card">
+        <div class="op-icon">🔄</div>
+        <h3>Compare</h3>
+        <p>Check if two quantities are equal across different units</p>
+        <a href="operations.html" class="btn btn-outline">Try it →</a>
+      </div>
+      <div class="op-card">
+        <div class="op-icon">📐</div>
+        <h3>Convert</h3>
+        <p>Convert a quantity from one unit to another of the same type</p>
+        <a href="operations.html" class="btn btn-outline">Try it →</a>
+      </div>
+      <div class="op-card">
+        <div class="op-icon">➕</div>
+        <h3>Add</h3>
+        <p>Add two quantities together in any compatible units</p>
+        <a href="operations.html" class="btn btn-outline">Try it →</a>
+      </div>
+      <div class="op-card">
+        <div class="op-icon">➖</div>
+        <h3>Subtract</h3>
+        <p>Subtract one quantity from another</p>
+        <a href="operations.html" class="btn btn-outline">Try it →</a>
+      </div>
+      <div class="op-card">
+        <div class="op-icon">➗</div>
+        <h3>Divide</h3>
+        <p>Divide two quantities to get a dimensionless scalar result</p>
+        <a href="operations.html" class="btn btn-outline">Try it →</a>
+      </div>
+    </div>
+
+    <!-- ══ GUEST notice ══ -->
+    <div class="locked-notice guest-only" style="margin-top:16px">
+      <div class="lock-icon">🔒</div>
+      <h3>Login Required for Operations</h3>
+      <p>Create a free account or login to start performing quantity measurements</p>
+      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="AuthModal.open('register')">Register Now</button>
+        <button class="btn btn-outline" onclick="AuthModal.open('login')">Login</button>
+      </div>
+    </div>
+
+    <!-- ══ ADMIN STATS ══ -->
+    <div class="admin-only" style="display:none; margin-top:32px">
+      <h2 style="margin-bottom:16px">📊 Statistics</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="totalCount">—</div>
+          <div class="stat-label">Total Operations</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">5</div>
+          <div class="stat-label">Operation Types</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">4</div>
+          <div class="stat-label">Measurement Types</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">🔐</div>
+          <div class="stat-label">AES-256 Secured</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ADMIN HISTORY ══ -->
+    <div class="admin-only" style="display:none; margin-top:16px">
+      <h2 style="margin-bottom:20px">📋 Operation History</h2>
+      <div class="history-section">
+
+        <!-- Filters — float layout -->
+        <div class="history-filters">
+          <div class="card" style="padding:16px">
+            <h3 style="margin-bottom:14px; font-size:0.9rem">🔍 Filters</h3>
+            <div class="form-group">
+              <label>By Operation</label>
+              <select id="filterOperation">
+                <option value="ALL">All Operations</option>
+                <option value="COMPARE">Compare</option>
+                <option value="CONVERT">Convert</option>
+                <option value="ADD">Add</option>
+                <option value="SUBTRACT">Subtract</option>
+                <option value="DIVIDE">Divide</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>By Type</label>
+              <select id="filterType">
+                <option value="ALL">All Types</option>
+                <option value="LENGTH">Length</option>
+                <option value="WEIGHT">Weight</option>
+                <option value="VOLUME">Volume</option>
+                <option value="TEMPERATURE">Temperature</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="history-table card" style="padding:0; overflow:hidden">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Operation</th><th>Operand 1</th><th>Operand 2</th>
+                  <th>Result</th><th>Type</th><th>Time</th>
+                </tr>
+              </thead>
+              <tbody id="historyBody">
+                <tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-muted)">Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

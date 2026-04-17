@@ -1,0 +1,38 @@
+/* ── Stats Grid ──────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.stat-card  { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-align: center; }
+.stat-value { font-size: 2rem; font-weight: 700; color: var(--primary); }
+.stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+
+/* ── Operation Cards ─────────────────────── */
+.op-grid  { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 32px; }
+.op-card  { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; transition: border-color 0.2s; }
+.op-card:hover { border-color: var(--primary); }
+.op-icon  { font-size: 1.8rem; margin-bottom: 10px; }
+.op-card h3 { margin-bottom: 6px; }
+.op-card p  { margin-bottom: 16px; font-size: 0.82rem; }
+
+/* ── History — Float layout ──────────────── */
+.history-section::after { content: ''; display: table; clear: both; }
+.history-filters        { float: left; width: 200px; margin-right: 20px; }
+.history-table          { overflow: hidden; }
+
+/* ── Operation Badges — Pseudo elements ───── */
+.op-badge          { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 700; }
+.op-badge::before  { content: '⚡ '; }
+.op-badge.COMPARE  { background: #1e3a5f; color: #93c5fd; }
+.op-badge.CONVERT  { background: #14532d; color: #86efac; }
+.op-badge.ADD      { background: #1a3320; color: #6ee7b7; }
+.op-badge.SUBTRACT { background: #3b1f00; color: #fcd34d; }
+.op-badge.DIVIDE   { background: #3b0764; color: #e9d5ff; }
+
+@media (max-width: 768px) {
+  .history-filters { float: none; width: 100%; margin-right: 0; margin-bottom: 16px; }
+  .stats-grid      { grid-template-columns: repeat(2, 1fr); }
+  .op-grid         { grid-template-columns: 1fr; }
+}

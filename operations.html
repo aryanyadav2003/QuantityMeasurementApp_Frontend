@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operations — QMeasure</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════
+       AUTH MODAL
+  ══════════════════════════════════════════ -->
+  <div class="modal-overlay" id="authModal">
+    <div class="modal-card">
+      <button class="modal-close" id="modalClose">✕</button>
+
+      <div class="modal-logo">
+        <h2>⚖️ QMeasure</h2>
+        <p>Sign in to use operations</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-form="login">Login</button>
+        <button class="auth-tab"        data-form="register">Register</button>
+      </div>
+
+      <form id="loginForm" class="auth-form active" novalidate>
+        <div id="loginAlert" class="alert"></div>
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" type="email" placeholder="admin@test.com" required>
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" type="password" placeholder="••••••••" required>
+        </div>
+        <button id="loginSubmitBtn" class="btn btn-primary btn-full" type="submit" data-text="Login">
+          <span class="spinner" id="loginSpinner"></span>
+          <span class="btn-text">Login</span>
+        </button>
+      </form>
+
+      <form id="registerForm" class="auth-form" novalidate>
+        <div id="registerAlert" class="alert"></div>
+        <div class="form-group">
+          <label for="regName">Full Name</label>
+          <input id="regName" type="text" placeholder="John Doe" required>
+        </div>
+        <div class="form-group">
+          <label for="regEmail">Email</label>
+          <input id="regEmail" type="email" placeholder="john@example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="regPassword">Password</label>
+          <input id="regPassword" type="password" placeholder="Min 6 characters" required>
+        </div>
+        <div class="form-group">
+          <label>Select Role</label>
+          <div class="role-select">
+            <button type="button" class="role-btn active" data-role="USER">👤 User</button>
+            <button type="button" class="role-btn"        data-role="ADMIN">🛡️ Admin</button>
+          </div>
+        </div>
+        <button id="registerSubmitBtn" class="btn btn-primary btn-full" type="submit" data-text="Create Account">
+          <span class="spinner" id="registerSpinner"></span>
+          <span class="btn-text">Create Account</span>
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       NAVBAR
+  ══════════════════════════════════════════ -->
+  <nav class="navbar">
+    <div class="container flex-between">
+      <a class="navbar-brand" href="dashboard.html">⚖️ QMeasure</a>
+      <div class="navbar-links">
+        <a class="nav-link"        href="dashboard.html">Dashboard</a>
+        <a class="nav-link active" href="operations.html">Operations</a>
+        <button id="navLoginBtn"    class="btn btn-outline" style="padding:6px 14px; font-size:0.82rem">Login</button>
+        <button id="navRegisterBtn" class="btn btn-primary" style="padding:6px 14px; font-size:0.82rem">Register</button>
+        <span id="navUser" class="navbar-user"></span>
+        <span id="navRole" class="badge"></span>
+        <button id="logoutBtn" class="btn btn-outline" style="padding:6px 14px; font-size:0.82rem; display:none">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container" style="padding-top:32px; padding-bottom:48px">
+
+    <div class="page-header">
+      <h1>⚡ Quantity Operations</h1>
+      <p>Compare, convert and calculate across Length, Weight, Volume and Temperature</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="compareTab">🔄 Compare</button>
+      <button class="tab-btn"        data-tab="convertTab">📐 Convert</button>
+      <button class="tab-btn"        data-tab="addTab">➕ Add</button>
+      <button class="tab-btn"        data-tab="subtractTab">➖ Subtract</button>
+      <button class="tab-btn"        data-tab="divideTab">➗ Divide</button>
+    </div>
+
+    <!-- ── COMPARE ── -->
+    <div class="tab-panel active" id="compareTab">
+      <div class="card" style="max-width:600px">
+        <h2 style="margin-bottom:20px">🔄 Compare Quantities</h2>
+        <div id="compareAlert" class="alert"></div>
+        <form id="compareForm" novalidate>
+          <div class="form-group">
+            <label>Measurement Type</label>
+            <select id="compareType">
+              <option value="LENGTH">Length</option><option value="WEIGHT">Weight</option>
+              <option value="VOLUME">Volume</option><option value="TEMPERATURE">Temperature</option>
+            </select>
+          </div>
+          <div class="grid-2">
+            <div class="form-group"><label>Value 1</label><input id="compareVal1" type="number" placeholder="e.g. 1" required></div>
+            <div class="form-group"><label>Unit 1</label><select id="compareUnit1"></select></div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group"><label>Value 2</label><input id="compareVal2" type="number" placeholder="e.g. 12" required></div>
+            <div class="form-group"><label>Unit 2</label><select id="compareUnit2"></select></div>
+          </div>
+          <button class="btn btn-primary" type="submit">Compare</button>
+        </form>
+        <div id="compareResult" class="result-box"></div>
+      </div>
+    </div>
+
+    <!-- ── CONVERT ── -->
+    <div class="tab-panel" id="convertTab">
+      <div class="card" style="max-width:600px">
+        <h2 style="margin-bottom:20px">📐 Convert Quantity</h2>
+        <div id="convertAlert" class="alert"></div>
+        <form id="convertForm" novalidate>
+          <div class="form-group">
+            <label>Measurement Type</label>
+            <select id="convertType">
+              <option value="LENGTH">Length</option><option value="WEIGHT">Weight</option>
+              <option value="VOLUME">Volume</option><option value="TEMPERATURE">Temperature</option>
+            </select>
+          </div>
+          <div class="grid-2">
+            <div class="form-group"><label>Value</label><input id="convertVal" type="number" placeholder="e.g. 1" required></div>
+            <div class="form-group"><label>From Unit</label><select id="convertFromUnit"></select></div>
+          </div>
+          <div class="form-group"><label>To Unit</label><select id="convertToUnit"></select></div>
+          <button class="btn btn-primary" type="submit">Convert</button>
+        </form>
+        <div id="convertResult" class="result-box"></div>
+      </div>
+    </div>
+
+    <!-- ── ADD ── -->
+    <div class="tab-panel" id="addTab">
+      <div class="card" style="max-width:600px">
+        <h2 style="margin-bottom:20px">➕ Add Quantities</h2>
+        <div id="addAlert" class="alert"></div>
+        <form id="addForm" novalidate>
+          <div class="form-group">
+            <label>Measurement Type</label>
+            <select id="addType">
+              <option value="LENGTH">Length</option><option value="WEIGHT">Weight</option><option value="VOLUME">Volume</option>
+            </select>
+          </div>
+          <div class="grid-2">
+            <div class="form-group"><label>Value 1</label><input id="addVal1" type="number" placeholder="e.g. 1" required></div>
+            <div class="form-group"><label>Unit 1</label><select id="addUnit1"></select></div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group"><label>Value 2</label><input id="addVal2" type="number" placeholder="e.g. 500" required></div>
+            <div class="form-group"><label>Unit 2</label><select id="addUnit2"></select></div>
+          </div>
+          <div class="form-group"><label>Result Unit</label><select id="addTargetUnit"></select></div>
+          <button class="btn btn-success" type="submit">Add</button>
+        </form>
+        <div id="addResult" class="result-box"></div>
+      </div>
+    </div>
+
+    <!-- ── SUBTRACT ── -->
+    <div class="tab-panel" id="subtractTab">
+      <div class="card" style="max-width:600px">
+        <h2 style="margin-bottom:20px">➖ Subtract Quantities</h2>
+        <div id="subtractAlert" class="alert"></div>
+        <form id="subtractForm" novalidate>
+          <div class="form-group">
+            <label>Measurement Type</label>
+            <select id="subtractType">
+              <option value="LENGTH">Length</option><option value="WEIGHT">Weight</option><option value="VOLUME">Volume</option>
+            </select>
+          </div>
+          <div class="grid-2">
+            <div class="form-group"><label>Value 1</label><input id="subtractVal1" type="number" placeholder="e.g. 2" required></div>
+            <div class="form-group"><label>Unit 1</label><select id="subtractUnit1"></select></div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group"><label>Value 2</label><input id="subtractVal2" type="number" placeholder="e.g. 500" required></div>
+            <div class="form-group"><label>Unit 2</label><select id="subtractUnit2"></select></div>
+          </div>
+          <div class="form-group"><label>Result Unit</label><select id="subtractTargetUnit"></select></div>
+          <button class="btn btn-danger" type="submit">Subtract</button>
+        </form>
+        <div id="subtractResult" class="result-box"></div>
+      </div>
+    </div>
+
+    <!-- ── DIVIDE ── -->
+    <div class="tab-panel" id="divideTab">
+      <div class="card" style="max-width:600px">
+        <h2 style="margin-bottom:20px">➗ Divide Quantities</h2>
+        <div id="divideAlert" class="alert"></div>
+        <form id="divideForm" novalidate>
+          <div class="form-group">
+            <label>Measurement Type</label>
+            <select id="divideType">
+              <option value="LENGTH">Length</option><option value="WEIGHT">Weight</option><option value="VOLUME">Volume</option>
+            </select>
+          </div>
+          <div class="grid-2">
+            <div class="form-group"><label>Value 1 (dividend)</label><input id="divideVal1" type="number" placeholder="e.g. 1" required></div>
+            <div class="form-group"><label>Unit 1</label><select id="divideUnit1"></select></div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group"><label>Value 2 (divisor)</label><input id="divideVal2" type="number" placeholder="e.g. 1" required></div>
+            <div class="form-group"><label>Unit 2</label><select id="divideUnit2"></select></div>
+          </div>
+          <button class="btn btn-primary" type="submit">Divide</button>
+        </form>
+        <div id="divideResult" class="result-box"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/operations.js"></script>
+</body>
+</html>
